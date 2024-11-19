@@ -27,10 +27,10 @@ services:
         platform: linux/amd64
         container_name: news_aggregator_db
         environment:
-            MYSQL_ROOT_PASSWORD: admin
-            MYSQL_DATABASE: news_aggregator
-            MYSQL_USER: root
-            MYSQL_PASSWORD: admin
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
         volumes:
             - db_data:/var/lib/mysql
         ports:

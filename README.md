@@ -109,7 +109,7 @@ First install the composer dependencies:
 
 4. The following ports are exposed:
 - **App:** 8081 (http://127.0.0.1:8081)
-- **MySQL:** 3307 (alternatively try 3306 if 3307 is not working for you)
+- **MySQL:** 3307
 - **PhpMyAdmin:** 8080 (http://127.0.0.1:8080)
 - **Swagger:** 8082 (http://127.0.0.1:8082)
 
