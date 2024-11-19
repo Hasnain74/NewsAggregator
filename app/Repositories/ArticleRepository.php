@@ -50,10 +50,10 @@ class ArticleRepository
      */
     public function getArticlesByPreferences(UserPreference $preferences, int $perPage): LengthAwarePaginator
     {
-        $query = UserPreference::query();
+        $query = Article::query();
         $this->applyFilter($query, 'sources', $preferences->sources);
         $this->applyFilter($query, 'categories', $preferences->categories);
-        $this->applyFilter($query, 'author', $preferences->author);
+        $this->applyFilter($query, 'author', $preferences->authors);
 
         return $query->orderByDesc('published_at')->paginate($perPage);
     }
