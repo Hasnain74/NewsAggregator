@@ -1,0 +1,263 @@
+openapi: 3.0.0
+info:
+  title: News Aggregator API
+  description: API documentation for the News Aggregator platform
+  version: 1.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/HASNAINKAHN74/NewsAggregator/1.0.0
+  - url: http://localhost:8081
+    description: Local Development Server
+paths:
+  /api/register:
+    post:
+      summary: Register a new user
+      description: User registration endpoint
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                name:
+                  type: string
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
+      responses:
+        200:
+          description: User successfully registered
+        400:
+          description: Invalid input
+        422:
+          description: Validation error
+
+  /api/login:
+    post:
+      summary: Log in a user
+      description: User login endpoint
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        200:
+          description: Successfully logged in
+        400:
+          description: Invalid credentials
+        422:
+          description: Validation error
+
+  /api/forgot-password:
+    post:
+      summary: Send reset password email
+      description: Sends a reset link to the user's email
+      operationId: forgotPassword
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        200:
+          description: Password reset email sent
+        400:
+          description: Invalid email address
+        422:
+          description: Validation error
+
+  /api/reset-password:
+    get:
+      summary: Reset password
+      description: Displays the password reset form
+      operationId: resetPassword
+      responses:
+        200:
+          description: Password reset page
+        400:
+          description: Invalid token
+        422:
+          description: Validation error
+
+  /api/articles:
+    get:
+      summary: Get all articles
+      description: Fetch a list of articles
+      operationId: getArticles
+      responses:
+        200:
+          description: List of articles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    content:
+                      type: string
+        400:
+          description: Invalid request
+        422:
+          description: Validation error
+
+  /api/preference-articles:
+    get:
+      summary: Get articles based on user preferences
+      description: Fetch articles based on the preferences of the logged-in user
+      operationId: getPreferenceArticles
+      responses:
+        200:
+          description: List of preference-based articles
+        400:
+          description: Invalid request
+        422:
+          description: Validation error
+
+  /api/logout:
+    post:
+      summary: Log out the user
+      description: Log out the authenticated user
+      operationId: logoutUser
+      responses:
+        200:
+          description: Successfully logged out
+        400:
+          description: Logout failed
+        422:
+          description: Validation error
+
+  /api/filter-articles:
+    get:
+      summary: Filter articles based on query parameters
+      description: Filter articles using various criteria
+      operationId: filterArticles
+      parameters:
+        - name: keyword
+          in: query
+          description: Filter by news keyword
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of filtered articles
+        400:
+          description: Invalid filter criteria
+        422:
+          description: Validation error
+
+  /api/preferences:
+    get:
+      summary: Get user preferences
+      description: Fetch user preferences
+      operationId: getUserPreferences
+      responses:
+        200:
+          description: User preferences
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  language:
+                    type: string
+                  notifications:
+                    type: boolean
+        400:
+          description: Invalid request
+        422:
+          description: Validation error
+
+    post:
+      summary: Set user preferences
+      description: Update user preferences
+      operationId: setUserPreferences
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                language:
+                  type: string
+                notifications:
+                  type: boolean
+      responses:
+        200:
+          description: Preferences successfully updated
+        400:
+          description: Invalid preferences
+        422:
+          description: Validation error
+
+components:
+  schemas:
+    Users:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        password:
+          type: string
+    Articles:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+
+    UserPreferences:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: ID of the user (foreign key from users table)
+        sources:
+          type: array
+          items:
+            type: string
+          description: List of news sources the user prefers
+          nullable: true
+        categories:
+          type: array
+          items:
+            type: string
+          description: Categories of news the user is interested in
+          nullable: true
+        authors:
+          type: array
+          items:
+            type: string
+          description: List of authors the user prefers to follow
+          nullable: true
+      required:
+        - user_id

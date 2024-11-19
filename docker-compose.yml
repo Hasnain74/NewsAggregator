@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+    app:
+        build: .
+        container_name: news_aggregator_app
+        platform: linux/amd64
+        environment:
+            - APACHE_DOCUMENT_ROOT=/var/www/html/public
+        volumes:
+            - .:/var/www/html  # Mount the current directory (project root) to /var/www/html in the container
+        ports:
+            - "8081:80"
+        depends_on:
+            - db
+    swagger-ui:
+        image: swaggerapi/swagger-ui
+        ports:
+            - "8082:8080"
+        environment:
+            - SWAGGER_JSON=/swagger/swagger.yml
+        volumes:
+            - ./swagger:/swagger
+
+    db:
+        image: mysql:latest
+        platform: linux/amd64
+        container_name: news_aggregator_db
+        environment:
+            MYSQL_ROOT_PASSWORD: admin
+            MYSQL_DATABASE: news_aggregator
+            MYSQL_USER: root
+            MYSQL_PASSWORD: admin
+        volumes:
+            - db_data:/var/lib/mysql
+        ports:
+            - "3307:3306"
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        platform: linux/amd64
+        container_name: news_aggregator_phpmyadmin
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+            PMA_USER: root
+            PMA_PASSWORD: admin
+        ports:
+            - "8080:80"
+        depends_on:
+            - db
+
+volumes:
+    db_data:
+
+networks:
+    news_aggregator_network: # Volume for MySQL data persistence
