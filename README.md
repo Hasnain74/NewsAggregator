@@ -130,17 +130,22 @@ Just in case for some reason it is not working on your end.
 ---
 
 ## Database Setup
-Run the migrations:
+Run the migrations inside docker:
+`docker-compose exec app php artisan migrate`
+
+OR
+
+Run migrations outside docker:
 `php artisan migrate`
 
 ---
 ## Unit tests
-To run the unit tests, run the following command:
-
-`docker-compose exec app vendor/bin/phpunit /var/www/html/tests`
+Run the unit tests outside docker:
+`php artisan test`
 
 OR
 
+To run inside docker:
 `docker-compose exec app php artisan test`
 
 ---
